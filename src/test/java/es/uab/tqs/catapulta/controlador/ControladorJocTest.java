@@ -1,5 +1,5 @@
 package test.java.es.uab.tqs.catapulta.controlador;
 
-public class temp {
+public class ControladorJocTest {
     
 }
