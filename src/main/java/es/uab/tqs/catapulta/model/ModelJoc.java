@@ -1,4 +1,4 @@
-package main.java.es.uab.tqs.catapulta.model;
+package es.uab.tqs.catapulta.model;
 
 import java.util.List;
 

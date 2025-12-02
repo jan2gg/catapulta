@@ -1,4 +1,4 @@
-package main.java.es.uab.tqs.catapulta.vista;
+package es.uab.tqs.catapulta.vista;
 
 public class VistaJoc {
     public void mostraTauler(char[][] tauler) {

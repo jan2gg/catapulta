@@ -1,4 +1,4 @@
-package test.java.es.uab.tqs.catapulta.vista;
+package es.uab.tqs.catapulta.vista;
 
 public class VistaJocTest {
     

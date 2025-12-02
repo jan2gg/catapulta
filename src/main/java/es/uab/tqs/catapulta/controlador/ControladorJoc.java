@@ -1,7 +1,7 @@
-package main.java.es.uab.tqs.catapulta.controlador;
+package es.uab.tqs.catapulta.controlador;
 
-import main.java.es.uab.tqs.catapulta.model.ModelJoc;
-import main.java.es.uab.tqs.catapulta.vista.VistaJoc;
+import es.uab.tqs.catapulta.model.ModelJoc;
+import es.uab.tqs.catapulta.vista.VistaJoc;
 
 public class ControladorJoc {
     private ModelJoc model;
