@@ -25,7 +25,7 @@ public class ControladorJocTest {
     public void testIniciaJoc() {
         controlador.iniciaJoc();
 
-        // Verifica que el tablero se ha inicializado y que la vista se ha configurado
+        // Verifica que el tauler s'ha inicialitzat i que la vista se ha configurat
         assertEquals(5, model.getTauler().length);
         Mockito.verify(vista).mostraTauler(Mockito.any());
         Mockito.verify(vista).mostraMissatges(null);
@@ -33,7 +33,7 @@ public class ControladorJocTest {
 
     @Test
     public void testJugadaUsuari() {
-        // Cas 1: Atacar una posición válida
+        // Cas 1: Atacar una posició vàlida
         boolean resultat = controlador.jugadaUsuari(2, 2);
         assertFalse(resultat);
 
