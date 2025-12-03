@@ -1,6 +1,5 @@
 package es.uab.tqs.catapulta.model;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;

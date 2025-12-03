@@ -16,7 +16,9 @@ public class ControladorJoc {
         // Lògica per iniciar el joc, incloent el bucle del joc
     }
 
-    public void jugadaUsuari(int x, int y) {
+    public boolean jugadaUsuari(int x, int y) {
+        // Lògica per processar la jugada de l'usuari
+        return false; // Retorna true si l'atac és un èxit, false en cas contrari
     }
 
     public void setConstruccions() {
