@@ -30,3 +30,4 @@ target/surefire-reports/es.uab.tqs.catapulta.controlador.ControladorJocTest.txt
 target/surefire-reports/es.uab.tqs.catapulta.model.ModelJocTest.txt
 target/surefire-reports/TEST-es.uab.tqs.catapulta.controlador.ControladorJocTest.xml
 target/surefire-reports/TEST-es.uab.tqs.catapulta.model.ModelJocTest.xml
+target/maven-archiver/pom.properties
