@@ -31,6 +31,28 @@ public class VistaJoc {
         }
     }
 
+    public int[] obtenirCoordenades() {
+        // Demana al jugador les coordenades per atacar i les retorna
+        int[] coordenades = new int[2];
+        boolean coordenadesValides = false;
+        
+        while (!coordenadesValides) {
+            try {
+                System.out.println("\nIntrodueix les coordenades per atacar:");
+                System.out.print("Fila (x): ");
+                coordenades[0] = scanner.nextInt();
+                System.out.print("Columna (y): ");
+                coordenades[1] = scanner.nextInt();
+                coordenadesValides = true;
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Error: Introdueix números válids!");
+                scanner.nextLine(); // Netejar el buffer
+            }
+        }
+        
+        return coordenades;
+    }
+
     public void jugadaUsuari() {
         // Lògica per demanar al jugador les coordenades per atacar
         System.out.println("\nIntrodueix les coordenades per atacar:");
