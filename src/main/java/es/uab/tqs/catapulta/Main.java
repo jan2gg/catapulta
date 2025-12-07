@@ -13,15 +13,42 @@ public class Main {
         
         // Iniciar el joc
         System.out.println("Benvingut a Catapulta!");
+        
+        // Establir les construccions al tauler
+        controlador.setConstruccions();
+        
+        // Iniciar el joc i mostrar el tauler
         controlador.iniciaJoc();
+        controlador.mostrarTauler();
         
         // Bucle principal del joc
         boolean jocActiu = true;
+        int intentos = 0;
+        
         while (jocActiu) {
-            vista.jugadaUsuari();
-            // Precessar la jugada de l'usuari
-            // Per ara només mostrem un missatge
-            System.out.println("Jugada processada.");
+            // Obtenir les coordenades del jugador
+            int[] coordenades = controlador.obtenirCoodenades();
+            int x = coordenades[0];
+            int y = coordenades[1];
+            
+            // Processar la jugada del usuari
+            try {
+                controlador.jugadaUsuari(x, y);
+                intentos++;
+                
+                // Mostrar el tauler actualitzat
+                controlador.mostrarTauler();
+                
+                // Verificar si el joc ha finalitzat
+                if (controlador.jocFinalitzat()) {
+                    System.out.println("\n¡Felicitats! Has destruït totes les construccions en " + intentos + " intents!");
+                    jocActiu = false;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
+        
+        System.out.println("Joc finalitzat. Fins aviat!");
     }
 }

@@ -28,7 +28,7 @@ public class ControladorJocTest {
         // Verifica que el tauler s'ha inicialitzat i que la vista se ha configurat
         assertEquals(5, model.getTauler().length);
         Mockito.verify(vista).mostraTauler(Mockito.any());
-        Mockito.verify(vista).mostraMissatges(null);
+        Mockito.verify(vista).mostraMissatges("Joc iniciat. Comença a atacar!");
     }
 
     @Test
@@ -56,12 +56,12 @@ public class ControladorJocTest {
 
         // Cas 1: Establir construccions correctament
         controlador.setConstruccions();
-        assertEquals(0, model.getConstruccions().size());
+        assertEquals(5, model.getConstruccions().size());
 
         // Cas 2: Intentar establir construccions sense inicialitzar el model
         ModelJoc emptyModel = new ModelJoc(0, 0);
         ControladorJoc emptyControlador = new ControladorJoc(emptyModel, vista);
-        assertThrows(Exception.class, () -> emptyControlador.setConstruccions());
+        assertThrows(IllegalStateException.class, () -> emptyControlador.setConstruccions());
     }
 }
 
