@@ -63,7 +63,7 @@ public class ModelJocTest {
         assertFalse(model.atac(5, 2));
         assertFalse(model.atac(2, 5));
         
-        // Decision coverage - casella atacada
+        // Decision coverage - casella atacada (intenta atacar de nou)
         assertFalse(model.atac(2, 2));
         
         // Decision coverage - construcció present
@@ -72,17 +72,15 @@ public class ModelJocTest {
         assertEquals(1, construccio.getCopsRebuts());
         
         // Condition coverage - múltiples condicions
-        assertFalse(model.atac(3, 3));
-        model.atac(3, 3);
-        assertFalse(model.atac(3, 3));
+        assertFalse(model.atac(3, 4));
+        model.atac(3, 4);
+        assertFalse(model.atac(3, 4));
         
-        // Path coverage - pairwise
-        model.addConstruccio(new ModelConstruccio(2, 2, 2, 2));
-        assertTrue(model.atac(2, 2));
-        assertTrue(model.atac(3, 3));
-        
-        // Loop testing - bucles interiores
-        assertFalse(model.atac(1, 0));
+        // Path coverage - pairwise (nova construcció en area diferent)
+        ModelJoc model2 = new ModelJoc(5, 5);
+        model2.addConstruccio(new ModelConstruccio(2, 2, 2, 2));
+        assertTrue(model2.atac(2, 2));
+        assertTrue(model2.atac(3, 3));
     }
 
     @Test

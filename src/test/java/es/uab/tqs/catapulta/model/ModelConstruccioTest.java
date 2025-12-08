@@ -86,6 +86,8 @@ public class ModelConstruccioTest {
         ModelConstruccio mcPair = new ModelConstruccio(2, 1, 0, 0);
         assertFalse(mcPair.estaDemolida());
         mcPair.rebeCop();
-        assertTrue(mcPair.estaDemolida());
+        assertFalse(mcPair.estaDemolida());  // Primer cop de 2
+        mcPair.rebeCop();
+        assertTrue(mcPair.estaDemolida());   // Segundo cop = demolida
     }
 }

@@ -31,3 +31,7 @@ target/surefire-reports/es.uab.tqs.catapulta.model.ModelJocTest.txt
 target/surefire-reports/TEST-es.uab.tqs.catapulta.controlador.ControladorJocTest.xml
 target/surefire-reports/TEST-es.uab.tqs.catapulta.model.ModelJocTest.xml
 target/maven-archiver/pom.properties
+target/surefire-reports/es.uab.tqs.catapulta.model.ModelConstruccioTest.txt
+target/surefire-reports/es.uab.tqs.catapulta.vista.VistaJocTest.txt
+target/surefire-reports/TEST-es.uab.tqs.catapulta.model.ModelConstruccioTest.xml
+target/surefire-reports/TEST-es.uab.tqs.catapulta.vista.VistaJocTest.xml
