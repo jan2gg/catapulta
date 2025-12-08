@@ -1,63 +1,110 @@
 package es.uab.tqs.catapulta.model;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelJocTest {
-
     private ModelJoc model;
+    private ModelConstruccio construccio;
 
     @BeforeEach
     public void setUp() {
         model = new ModelJoc(5, 5);
+        construccio = new ModelConstruccio(2, 2, 1, 1);
     }
 
     @Test
     public void testInicialitzaTauler() {
         int[][] tauler = model.getTauler();
         assertEquals(5, tauler.length);
-        for (int i = 0; i < tauler.length; i++) {
-            assertEquals(5, tauler[i].length);
-        }
-
-        // Verifica que totes les posicions són inicialment buides.
+        assertEquals(5, tauler[0].length);
         for (int[] fila : tauler) {
             for (int cell : fila) {
-                assertEquals(0, cell); // '0' representa un espai buit
+                assertEquals(0, cell);
             }
         }
     }
 
     @Test
     public void testAddConstruccio() {
-        // Cas 1: Afegir primera construcció
-        ModelConstruccio construccio = new ModelConstruccio();
+        // Particions equivalents
         model.addConstruccio(construccio);
         assertEquals(1, model.getConstruccions().size());
+        assertTrue(model.existeixConstruccioEnPosicio(1, 1));
         
-        // Cas 2: Afegir segona construcció
-        ModelConstruccio altraConstruccio = new ModelConstruccio();
-        model.addConstruccio(altraConstruccio);
+        // Valors límit i frontera
+        model.addConstruccio(new ModelConstruccio(1, 1, 0, 0));
         assertEquals(2, model.getConstruccions().size());
+        model.addConstruccio(new ModelConstruccio(3, 3, 4, 4));
+        assertEquals(3, model.getConstruccions().size());
         
-        // Cas 3: Afegir construcció fora del tauler
-        //ModelConstruccio construccioForaDeRang = new ModelConstruccio();
-        //assertThrows(IllegalArgumentException.class, () -> model.addConstruccio(construccioForaDeRang));
+        // Decision coverage - null
+        assertThrows(IllegalArgumentException.class, () -> model.addConstruccio(null));
     }
 
     @Test
     public void testAtac() {
-        boolean resultat = model.atac(2, 2);
-        assertFalse(resultat);
+        // Particions equivalents - casella buida
+        assertFalse(model.atac(2, 2));
+        assertTrue(model.estaCasellAtacada(2, 2));
+        
+        // Valors límit i frontera - cantonades
+        assertFalse(model.atac(0, 0));
+        assertFalse(model.atac(0, 4));
+        assertFalse(model.atac(4, 0));
+        assertFalse(model.atac(4, 4));
+        
+        // Valors límit i frontera - fora límits
+        assertFalse(model.atac(-1, -1));
+        assertFalse(model.atac(-1, 2));
+        assertFalse(model.atac(2, -1));
+        assertFalse(model.atac(5, 5));
+        assertFalse(model.atac(5, 2));
+        assertFalse(model.atac(2, 5));
+        
+        // Decision coverage - casella atacada
+        assertFalse(model.atac(2, 2));
+        
+        // Decision coverage - construcció present
+        model.addConstruccio(construccio);
+        assertTrue(model.atac(1, 1));
+        assertEquals(1, construccio.getCopsRebuts());
+        
+        // Condition coverage - múltiples condicions
+        assertFalse(model.atac(3, 3));
+        model.atac(3, 3);
+        assertFalse(model.atac(3, 3));
+        
+        // Path coverage - pairwise
+        model.addConstruccio(new ModelConstruccio(2, 2, 2, 2));
+        assertTrue(model.atac(2, 2));
+        assertTrue(model.atac(3, 3));
+        
+        // Loop testing - bucles interiores
+        assertFalse(model.atac(1, 0));
+    }
 
-        // Valors límit i frontera
-        assertFalse(model.atac(0, 0)); // Cantonada superior esquerra
-        assertFalse(model.atac(0, 4)); // Cantonada superior dreta
-        assertFalse(model.atac(4, 0)); // Cantonada inferior esquerra
-        assertFalse(model.atac(4, 4)); // Cantonada inferior dreta
-        assertFalse(model.atac(-1, -1));    // Fora de límits negatiu
-        assertFalse(model.atac(5, 5)); // Fora de límits positiu
+    @Test
+    public void testTotesConstruccionsDemolides() {
+        // Particions equivalents - cap demolida
+        model.addConstruccio(construccio);
+        assertFalse(model.totesConstruccionsDemolides());
+        
+        // Valors límit - una demolida parcialment
+        construccio.rebeCop();
+        assertFalse(model.totesConstruccionsDemolides());
+        
+        // Decision coverage - totes demolides
+        construccio.rebeCop();
+        construccio.rebeCop();
+        construccio.rebeCop();
+        assertTrue(model.totesConstruccionsDemolides());
+        
+        // Loop testing - múltiples construccions
+        model.addConstruccio(new ModelConstruccio(1, 1, 0, 0));
+        assertFalse(model.totesConstruccionsDemolides());
+        model.getConstruccions().get(1).rebeCop();
+        assertTrue(model.totesConstruccionsDemolides());
     }
 }
