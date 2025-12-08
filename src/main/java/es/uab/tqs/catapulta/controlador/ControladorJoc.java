@@ -34,9 +34,9 @@ public class ControladorJoc {
         boolean atac = model.atac(x, y);
         
         if (atac) {
-            vista.mostraMissatges("Atac correcte! Has colpejat una construcció!");
+            vista.mostraMissatges("Atac correcte! Has colpejat una construcció.");
         } else {
-            vista.mostraMissatges("Aigua! No hi ha res en aquesta posició.");
+            vista.mostraMissatges("Mala sort! No hi ha res en aquesta posició.");
         }
         
         return atac;
@@ -82,7 +82,7 @@ public class ControladorJoc {
                 if (!atacades[i][j]) {
                     taulerChar[i][j] = '~'; // Casella no atacada
                 } else if (tauler[i][j] == 0) {
-                    taulerChar[i][j] = 'O'; // Agua (atac buit)
+                    taulerChar[i][j] = 'O'; // Atac fallat (casella buida)
                 } else {
                     taulerChar[i][j] = 'X'; // Construcció colpejada
                 }

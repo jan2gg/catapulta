@@ -9,6 +9,11 @@ public class VistaJoc {
         this.scanner = new Scanner(System.in);
     }
 
+    // Constructor per testing amb Scanner mockejat
+    public VistaJoc(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
     public void mostraTauler(char[][] tauler) {
         // Lògica per desplegar el tauler a la terminal
         System.out.println("\n  " + getNumeColumnes(tauler[0].length));
