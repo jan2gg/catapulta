@@ -1,12 +1,13 @@
 package es.uab.tqs.catapulta.controlador;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import es.uab.tqs.catapulta.model.ModelConstruccio;
 import es.uab.tqs.catapulta.model.ModelJoc;
 import es.uab.tqs.catapulta.vista.VistaJoc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 public class ControladorJocTest {
 
@@ -17,51 +18,56 @@ public class ControladorJocTest {
     @BeforeEach
     public void setUp() {
         model = new ModelJoc(5, 5);
-        vista = Mockito.mock(VistaJoc.class);
+        vista = mock(VistaJoc.class);
         controlador = new ControladorJoc(model, vista);
     }
 
     @Test
-    public void testIniciaJoc() {
+    public void testControladorEnUnSolMetode() {
+        // Particions equivalents - iniciaJoc
         controlador.iniciaJoc();
+        verify(vista).mostraTauler(any());
+        verify(vista).mostraMissatges("Joc iniciat. Comença a atacar!");
 
-        // Verifica que el tauler s'ha inicialitzat i que la vista se ha configurat
-        assertEquals(5, model.getTauler().length);
-        Mockito.verify(vista).mostraTauler(Mockito.any());
-        Mockito.verify(vista).mostraMissatges("Joc iniciat. Comença a atacar!");
-    }
+        // Valors límit i frontera - jugadaUsuari fora de límits
+        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(-1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(0, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(5, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(0, 5));
 
-    @Test
-    public void testJugadaUsuari() {
-        // Cas 1: Atacar una posició vàlida
-        boolean resultat = controlador.jugadaUsuari(2, 2);
-        assertFalse(resultat);
+        // Particions equivalents - jugadaUsuari aigua
+        assertFalse(controlador.jugadaUsuari(1, 1));
+        verify(vista, atLeastOnce()).mostraMissatges(contains("Aigua"));
 
-        // Cas 2: Coordenades valors fora de límits
-        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(-1, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(5, 5));
-        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(0, 6));
-        assertThrows(IndexOutOfBoundsException.class, () -> controlador.jugadaUsuari(6, 0));
-        
-        // Cas 3: Coordenades de valors frontera
-        assertFalse(controlador.jugadaUsuari(0, 0)); // Cantonada superior esquerra
-        assertFalse(controlador.jugadaUsuari(0, 4)); // Cantonada superior dreta
-        assertFalse(controlador.jugadaUsuari(4, 0)); // Cantonada inferior esquerra
-        assertFalse(controlador.jugadaUsuari(4, 4)); // Cantonada inferior dreta
-    }
+        // Decision/Condition coverage - casella ja atacada
+        assertFalse(controlador.jugadaUsuari(1, 1));
 
-    @Test
-    public void testSetConstruccions() {
-        // Lògica per provar la configuració de construccions
+        // Pairwise + decision coverage - jugadaUsuari encert
+        model.addConstruccio(new ModelConstruccio(1, 1, 2, 2));
+        assertTrue(controlador.jugadaUsuari(2, 2));
+        verify(vista, atLeastOnce()).mostraMissatges(contains("Atac correcte"));
 
-        // Cas 1: Establir construccions correctament
+        // Loop testing - mostrarTauler recorre tot
+        controlador.mostrarTauler();
+        verify(vista, atLeast(2)).mostraTauler(any());
+
+        // Path coverage - setConstruccions correcte
         controlador.setConstruccions();
-        assertEquals(5, model.getConstruccions().size());
+        assertEquals(6, model.getConstruccions().size()); // 1 afegida manual + 5 predefinides
 
-        // Cas 2: Intentar establir construccions sense inicialitzar el model
-        ModelJoc emptyModel = new ModelJoc(0, 0);
-        ControladorJoc emptyControlador = new ControladorJoc(emptyModel, vista);
-        assertThrows(IllegalStateException.class, () -> emptyControlador.setConstruccions());
+        // Path/exception - setConstruccions sobre tauler buit
+        ControladorJoc buit = new ControladorJoc(new ModelJoc(0, 0), vista);
+        assertThrows(IllegalStateException.class, buit::setConstruccions);
+
+        // Path coverage - jocFinalitzat (demolir totes les construccions)
+        ModelJoc model2 = new ModelJoc(5, 5);
+        VistaJoc vista2 = mock(VistaJoc.class);
+        ControladorJoc ctrl2 = new ControladorJoc(model2, vista2);
+        ctrl2.setConstruccions();
+        int[][] coords = {{0,0},{0,2},{2,2},{3,1},{4,3}};
+        for (int[] c : coords) {
+            ctrl2.jugadaUsuari(c[0], c[1]);
+        }
+        assertTrue(ctrl2.jocFinalitzat());
     }
 }
-
