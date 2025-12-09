@@ -41,6 +41,13 @@ public class ModelJocTest {
         
         // Decision coverage - null
         assertThrows(IllegalArgumentException.class, () -> model.addConstruccio(null));
+        
+        // Valors límit i frontera - coordenades negatives (branch coverage)
+        ModelConstruccio construccioNegativa = new ModelConstruccio(1, 1, -1, -1);
+        model.addConstruccio(construccioNegativa);
+        assertEquals(4, model.getConstruccions().size());
+        // Verificar que no es marca al tauler (fora de límits)
+        assertFalse(model.existeixConstruccioEnPosicio(-1, -1));
     }
 
     @Test
@@ -104,5 +111,37 @@ public class ModelJocTest {
         assertFalse(model.totesConstruccionsDemolides());
         model.getConstruccions().get(1).rebeCop();
         assertTrue(model.totesConstruccionsDemolides());
+    }
+
+    @Test
+    public void testEstaCasellAtacada() {
+        // Particions equivalents - casella no atacada
+        assertFalse(model.estaCasellAtacada(2, 2));
+        
+        // Particions equivalents - casella atacada
+        model.atac(2, 2);
+        assertTrue(model.estaCasellAtacada(2, 2));
+        
+        // Valors límit i frontera - fora de límits (branch coverage)
+        assertFalse(model.estaCasellAtacada(-1, 0));
+        assertFalse(model.estaCasellAtacada(5, 0));
+        assertFalse(model.estaCasellAtacada(0, -1));
+        assertFalse(model.estaCasellAtacada(0, 5));
+    }
+
+    @Test
+    public void testExisteixConstruccioEnPosicio() {
+        // Particions equivalents - casella buida
+        assertFalse(model.existeixConstruccioEnPosicio(3, 3));
+        
+        // Particions equivalents - casella amb construcció
+        model.addConstruccio(new ModelConstruccio(1, 1, 2, 2));
+        assertTrue(model.existeixConstruccioEnPosicio(2, 2));
+        
+        // Valors límit i frontera - fora de límits (branch coverage)
+        assertFalse(model.existeixConstruccioEnPosicio(-1, 0));
+        assertFalse(model.existeixConstruccioEnPosicio(5, 0));
+        assertFalse(model.existeixConstruccioEnPosicio(0, -1));
+        assertFalse(model.existeixConstruccioEnPosicio(0, 5));
     }
 }
