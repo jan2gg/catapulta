@@ -2,20 +2,22 @@ package es.uab.tqs.catapulta.vista;
 
 import java.util.Scanner;
 
+// Vista de consola: mostra el tauler i recull interaccions amb l'usuari.
 public class VistaJoc {
+    // Canal d'entrada per llegir coordenades (substituïble en tests).
     private Scanner scanner;
 
     public VistaJoc() {
         this.scanner = new Scanner(System.in);
     }
 
-    // Constructor per testing amb Scanner mockejat
+    // Constructor per testing amb Scanner mockejat.
     public VistaJoc(Scanner scanner) {
         this.scanner = scanner;
     }
 
     public void mostraTauler(char[][] tauler) {
-        // Lògica per desplegar el tauler a la terminal
+        // Dibuixa el tauler en text: capçaleres de columnes, separadors i files.
         System.out.println("\n  " + getNumeColumnes(tauler[0].length));
         System.out.println("  " + getLiniaSeparadora(tauler[0].length));
         
@@ -30,14 +32,14 @@ public class VistaJoc {
     }
 
     public void mostraMissatges(String missatge) {
-        // Lògica per mostrar missatges a l'usuari
+        // Presenta feedback a l'usuari si el text no és buit.
         if (missatge != null && !missatge.isEmpty()) {
             System.out.println(missatge);
         }
     }
 
     public int[] obtenirCoordenades() {
-        // Demana al jugador les coordenades per atacar i les retorna
+        // Demana coordenades d'atac; bucle fins a entrada vàlida (gestiona InputMismatch).
         int[] coordenades = new int[2];
         boolean coordenadesValides = false;
         
@@ -50,8 +52,8 @@ public class VistaJoc {
                 coordenades[1] = scanner.nextInt();
                 coordenadesValides = true;
             } catch (java.util.InputMismatchException e) {
-                System.out.println("Error: Introdueix números válids!");
-                scanner.nextLine(); // Netejar el buffer
+                System.out.println("Error: Introdueix números vàlids!");
+                scanner.nextLine(); // Neteja buffer per tornar a llegir.
             }
         }
         
@@ -59,7 +61,7 @@ public class VistaJoc {
     }
 
     public void jugadaUsuari() {
-        // Lògica per demanar al jugador les coordenades per atacar
+        // Demana una jugada directa (no retorna valors; útil per compatibilitat).
         System.out.println("\nIntrodueix les coordenades per atacar:");
         System.out.print("Fila (x): ");
         int x = scanner.nextInt();

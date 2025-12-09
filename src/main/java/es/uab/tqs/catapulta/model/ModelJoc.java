@@ -3,12 +3,15 @@ package es.uab.tqs.catapulta.model;
 import java.util.ArrayList;
 import java.util.List;
 
+// Model del joc: manté l'estat del tauler, les construccions i els atacs efectuats.
 public class ModelJoc {
     
+    // Estat del tauler: 0 buit, >0 identifica la construcció col·locada.
     private int[][] tauler; // Matriu que representa el tauler del joc (0=Buit, >0=ID construcció)
-    private List<ModelConstruccio> construccions; // Llista de construccions
+    private List<ModelConstruccio> construccions; // Llista de construccions col·locades
     private boolean[][] atacades; // Matriu que marca caselles ja atacades
 
+    // Crea un joc amb dimensions donades i inicialitza tauler i marcatge d'atacs.
     public ModelJoc(int width, int height) {
         this.tauler = new int[height][width];
         this.atacades = new boolean[height][width];
@@ -17,7 +20,7 @@ public class ModelJoc {
     }
 
     private void inicialitzaTauler() {
-        // Inicialitzar el tauler amb espais buits
+        // Omple el tauler amb buits i neteja l'historial d'atacs.
         for (int i = 0; i < tauler.length; i++) {
             for (int j = 0; j < tauler[i].length; j++) {
                 tauler[i][j] = 0; // 0 representa un espai buit
@@ -27,7 +30,7 @@ public class ModelJoc {
     }
 
     public void addConstruccio(ModelConstruccio construccio) {
-        // Lògica per afegir una construcció al tauler
+        // Afegeix una construcció; cas límit: null -> excepció.
         if (construccio == null) {
             throw new IllegalArgumentException("La construcció no pot ser null");
         }
@@ -35,7 +38,7 @@ public class ModelJoc {
         int id = construccions.size() + 1;
         construccions.add(construccio);
         
-        // Marcar la construcció al tauler
+        // Marca les cel·les que ocupa; part exterior al tauler es descarta silenciosament.
         for (int i = 0; i < construccio.getMidaVertical(); i++) {
             for (int j = 0; j < construccio.getMidaHoritzontal(); j++) {
                 int fila = construccio.getFilaInicial() + i;
@@ -49,11 +52,12 @@ public class ModelJoc {
     }
 
     public boolean atac(int x, int y) {
-        // Lògica per atacar una posició i verificar si hi ha una construcció
+        // Partició frontera: coordenades fora del tauler -> atac invàlid.
         if (x < 0 || x >= tauler.length || y < 0 || y >= tauler[0].length) {
             return false; // Fora de límits
         }
         
+        // Partició equivalent: casella ja atacada -> no es repeteix.
         if (atacades[x][y]) {
             return false; // Ja ha estat atacada
         }
@@ -62,7 +66,7 @@ public class ModelJoc {
         int construccioId = tauler[x][y];
         
         if (construccioId > 0) {
-            // Hi ha una construcció en aquesta posició
+            // Hi ha una construcció en aquesta posició; es registra el cop.
             ModelConstruccio construccio = construccions.get(construccioId - 1);
             construccio.rebeCop();
             return true; // Atac correcte
@@ -72,6 +76,7 @@ public class ModelJoc {
     }
 
     public boolean estaCasellAtacada(int x, int y) {
+        // Consulta segura: fora de rang es considera no atacat.
         if (x < 0 || x >= tauler.length || y < 0 || y >= tauler[0].length) {
             return false;
         }
@@ -79,6 +84,7 @@ public class ModelJoc {
     }
 
     public boolean existeixConstruccioEnPosicio(int x, int y) {
+        // Consulta segura: fora de rang es considera sense construcció.
         if (x < 0 || x >= tauler.length || y < 0 || y >= tauler[0].length) {
             return false;
         }
@@ -86,6 +92,7 @@ public class ModelJoc {
     }
 
     public boolean totesConstruccionsDemolides() {
+        // Condició de victòria: totes les construccions han estat demolides.
         for (ModelConstruccio construccio : construccions) {
             if (!construccio.estaDemolida()) {
                 return false;
