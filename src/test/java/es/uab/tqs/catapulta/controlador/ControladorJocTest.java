@@ -37,7 +37,7 @@ public class ControladorJocTest {
 
         // Particions equivalents - jugadaUsuari aigua
         assertFalse(controlador.jugadaUsuari(1, 1));
-        verify(vista, atLeastOnce()).mostraMissatges(contains("Aigua"));
+        verify(vista, atLeastOnce()).mostraMissatges(contains("Mala sort"));
 
         // Decision/Condition coverage - casella ja atacada
         assertFalse(controlador.jugadaUsuari(1, 1));

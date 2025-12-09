@@ -78,3 +78,7 @@ target/site/jacoco/jacoco-resources/sort.gif
 target/site/jacoco/jacoco-resources/sort.js
 target/site/jacoco/jacoco-resources/source.gif
 target/site/jacoco/jacoco-resources/up.gif
+target/site/jacoco/es.uab.tqs.catapulta.controlador/ControladorFlux.html
+target/site/jacoco/es.uab.tqs.catapulta.controlador/ControladorFlux.java.html
+target/surefire-reports/es.uab.tqs.catapulta.controlador.ControladorFluxTest.txt
+target/surefire-reports/TEST-es.uab.tqs.catapulta.controlador.ControladorFluxTest.xml
