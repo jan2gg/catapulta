@@ -1,14 +1,19 @@
 package es.uab.tqs.catapulta.model;
 
+// Representa una construcció al tauler amb mida i estat de demolició.
 public class ModelConstruccio {
 
+    // Dimensions i localització de la peça al tauler.
     private int midaVertical;       // Altura de la construcció
     private int midaHoritzontal;    // Amplada de la construcció
-    private int copsRebuts;         // Nombre de cops rebuts
-    private boolean estaDemolida;   // Estat de la construcció
     private int filaInicial;        // Fila inicial de la construcció
     private int columnaInicial;     // Columna inicial de la construcció
 
+    // Estat de danys i demolició.
+    private int copsRebuts;         // Nombre de cops rebuts
+    private boolean estaDemolida;   // Estat de la construcció
+
+    // Constructor principal: defineix mida i posició de la construcció.
     public ModelConstruccio(int midaVertical, int midaHoritzontal, int filaInicial, int columnaInicial) {
         this.midaVertical = midaVertical;
         this.midaHoritzontal = midaHoritzontal;
@@ -18,6 +23,7 @@ public class ModelConstruccio {
         this.estaDemolida = false;
     }
 
+    // Constructor per defecte: peça mínima 1x1 a la cantonada superior esquerra.
     public ModelConstruccio() {
         this(1, 1, 0, 0);
     }
@@ -47,6 +53,7 @@ public class ModelConstruccio {
     }
 
     public void rebeCop() {
+        // Incrementa el comptador i comprova cas límit: suficients impactes per demolir.
         if (!estaDemolida) {
             copsRebuts++;
             int copsNecessaris = midaVertical * midaHoritzontal;
